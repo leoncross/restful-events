@@ -8,12 +8,14 @@ const expect = chai.expect;
 chai.use(sinonChai);
 
 describe('DefinitionsController', () => {
+  let fakeDb;
   let definitionsController;
   let definitionsService;
   let definitionsServiceGetSchemaStub;
 
   beforeEach(() => {
-    definitionsService = new DefinitionsService();
+    fakeDb = 'fakeDb';
+    definitionsService = new DefinitionsService(fakeDb);
 
     definitionsServiceGetSchemaStub = sinon.stub(
         definitionsService,
@@ -22,6 +24,7 @@ describe('DefinitionsController', () => {
 
     definitionsController = new DefinitionsController(definitionsService);
   });
+
   describe('/Get', () => {
     it('calls definitions service getSchema with passed arguments', () => {
       let getType = {schema: 'confetti'};

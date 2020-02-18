@@ -1,6 +1,6 @@
 import {Module} from '@nestjs/common';
 import {DefinitionsModule} from './definitions/definitions.module';
-
+import * as admin from 'firebase-admin';
 import * as serviceAccount from '../certs.json';
 
 admin.initializeApp({
