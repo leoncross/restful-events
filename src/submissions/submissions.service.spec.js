@@ -2,7 +2,7 @@ import chai from 'chai';
 import sinonChai from 'sinon-chai';
 
 import SubmissionsService from './submissions.service';
-import { confetti } from '../../test/testHelpers/resources';
+import {confetti} from '../../test/testHelpers/resources';
 import generateMockFirestore from '../../test/testHelpers/mockFirestore';
 
 const expect = chai.expect;
@@ -20,30 +20,30 @@ describe('SubmissionsService', () => {
     it('returns true submission contains required key', () => {
       const schemaElement = {
         key: 'magicstyle',
-        validation: { required: true },
+        validation: {required: true},
       };
-      const submission = { magicstyle: 'escapologist' };
+      const submission = {magicstyle: 'escapologist'};
       expect(submissionsService.matchesRequired(schemaElement, submission)).to
-        .be.true;
+          .be.true;
     });
 
     it('returns true when validation is not required', () => {
       const schemaElement = {
         key: 'magicstyle',
-        validation: { required: false },
+        validation: {required: false},
       };
-      const submission = { something_different: 'escapologist' };
+      const submission = {something_different: 'escapologist'};
       expect(submissionsService.matchesRequired(schemaElement, submission)).to
-        .be.true;
+          .be.true;
     });
     it('returns false validation is required, and submission does not contain key', () => {
       const schemaElement = {
         key: 'magicstyle',
-        validation: { required: true },
+        validation: {required: true},
       };
-      const submission = { something_different: 'escapologist' };
+      const submission = {something_different: 'escapologist'};
       expect(submissionsService.matchesRequired(schemaElement, submission)).to
-        .be.false;
+          .be.false;
     });
   });
 
@@ -52,44 +52,44 @@ describe('SubmissionsService', () => {
       const schemaElement = {
         key: 'magictype',
         options: [
-          { name: 'Mix and mingle magic', value: 'mixmingle' },
-          { name: 'Magic show', value: 'magicshow' },
-          { name: 'Table magic', value: 'tablemagic' },
+          {name: 'Mix and mingle magic', value: 'mixmingle'},
+          {name: 'Magic show', value: 'magicshow'},
+          {name: 'Table magic', value: 'tablemagic'},
         ],
         title: 'How would you like the magic performed?',
         type: 'radios',
-        validation: { required: true },
+        validation: {required: true},
       };
       const submissionValue = 'tablemagic';
       expect(submissionsService.matchesOptions(schemaElement, submissionValue))
-        .to.be.true;
+          .to.be.true;
     });
     it('returns true if submission does not contain options', () => {
       const schemaElement = {
         key: 'magictype',
         title: 'How would you like the magic performed?',
         type: 'radios',
-        validation: { required: true },
+        validation: {required: true},
       };
       const submissionValue = 'tablemagic';
       expect(submissionsService.matchesOptions(schemaElement, submissionValue))
-        .to.be.true;
+          .to.be.true;
     });
     it('returns false if submission does not contain required options', () => {
       const schemaElement = {
         key: 'magictype',
         options: [
-          { name: 'Mix and mingle magic', value: 'mixmingle' },
-          { name: 'Magic show', value: 'magicshow' },
-          { name: 'Table magic', value: 'tablemagic' },
+          {name: 'Mix and mingle magic', value: 'mixmingle'},
+          {name: 'Magic show', value: 'magicshow'},
+          {name: 'Table magic', value: 'tablemagic'},
         ],
         title: 'How would you like the magic performed?',
         type: 'radios',
-        validation: { required: true },
+        validation: {required: true},
       };
       const submissionValue = 'cardtricks';
       expect(submissionsService.matchesOptions(schemaElement, submissionValue))
-        .to.be.false;
+          .to.be.false;
     });
   });
   describe('matchesLength', () => {
@@ -106,9 +106,9 @@ describe('SubmissionsService', () => {
         },
       };
       const submissionValue =
-        'this is a happy message that matches required message length';
+          'this is a happy message that matches required message length';
       expect(submissionsService.matchesLength(schemaElement, submissionValue))
-        .to.be.true;
+          .to.be.true;
     });
     it('returns true when submission has no required length', () => {
       const schemaElement = {
@@ -122,9 +122,9 @@ describe('SubmissionsService', () => {
         },
       };
       const submissionValue =
-        'this is a happy message that matches the non-required length';
+          'this is a happy message that matches the non-required length';
       expect(submissionsService.matchesLength(schemaElement, submissionValue))
-        .to.be.true;
+          .to.be.true;
     });
 
     it('returns false when submission doesnt match required length', () => {
@@ -142,7 +142,7 @@ describe('SubmissionsService', () => {
       const submissionValue = 'this is unfortunately a sad message that fails';
 
       expect(submissionsService.matchesLength(schemaElement, submissionValue))
-        .to.be.false;
+          .to.be.false;
     });
   });
 
@@ -153,12 +153,12 @@ describe('SubmissionsService', () => {
         placeholder: 'Your email...',
         title: 'Email',
         type: 'string',
-        validation: { pattern: '^\\S+@\\S+$', required: true },
+        validation: {pattern: '^\\S+@\\S+$', required: true},
       };
       const submissionValue = 'success@email.com';
 
       expect(submissionsService.matchesPattern(schemaElement, submissionValue))
-        .to.be.true;
+          .to.be.true;
     });
     it('returns true if the schemaElement has no required pattern ', () => {
       const schemaElement = {
@@ -166,12 +166,12 @@ describe('SubmissionsService', () => {
         placeholder: 'Your email...',
         title: 'Email',
         type: 'string',
-        validation: { required: true },
+        validation: {required: true},
       };
       const submissionValue = 'success@email.com';
 
       expect(submissionsService.matchesPattern(schemaElement, submissionValue))
-        .to.be.true;
+          .to.be.true;
     });
     it('returns false if the submission value does not match the required pattern', () => {
       const schemaElement = {
@@ -179,12 +179,12 @@ describe('SubmissionsService', () => {
         placeholder: 'Your email...',
         title: 'Email',
         type: 'string',
-        validation: { pattern: '^\\S+@\\S+$', required: true },
+        validation: {pattern: '^\\S+@\\S+$', required: true},
       };
       const submissionValue = 'failing_email';
 
       expect(submissionsService.matchesPattern(schemaElement, submissionValue))
-        .to.be.false;
+          .to.be.false;
     });
   });
 
@@ -194,26 +194,26 @@ describe('SubmissionsService', () => {
         key: 'date',
         placeholder: 'Date of your event',
         type: 'date',
-        validation: { minDate: '2018-01-21', required: true },
+        validation: {minDate: '2018-01-21', required: true},
       };
 
       const submissionValue = '2020-04-14';
 
       expect(submissionsService.matchesDate(schemaElement, submissionValue)).to
-        .be.true;
+          .be.true;
     });
     it('returns false if submission value is lesser than minDate', () => {
       const schemaElement = {
         key: 'date',
         placeholder: 'Date of your event',
         type: 'date',
-        validation: { minDate: '2018-01-21', required: true },
+        validation: {minDate: '2018-01-21', required: true},
       };
 
       const submissionValue = '2016-12-04';
 
       expect(submissionsService.matchesDate(schemaElement, submissionValue)).to
-        .be.false;
+          .be.false;
     });
   });
 
@@ -231,14 +231,14 @@ describe('SubmissionsService', () => {
         const result = confetti;
         const schemaType = 'confetti';
 
-        const mockFirestore = generateMockFirestore({ functionality, result });
+        const mockFirestore = generateMockFirestore({functionality, result});
         submissionsService = new SubmissionsService(mockFirestore);
 
         const creationResult = await submissionsService.createSubmission(
-          schemaType,
-          userData,
+            schemaType,
+            userData,
         );
-        expect(creationResult).to.deep.equal({ success: 'storage successful' });
+        expect(creationResult).to.deep.equal({success: 'storage successful'});
       });
     });
     describe('errors', () => {
@@ -257,14 +257,14 @@ describe('SubmissionsService', () => {
         const result = confetti;
         const schemaType = 'confetti';
 
-        const mockFirestore = generateMockFirestore({ functionality, result });
+        const mockFirestore = generateMockFirestore({functionality, result});
         submissionsService = new SubmissionsService(mockFirestore);
 
         const creationResult = await submissionsService.createSubmission(
-          schemaType,
-          userData,
+            schemaType,
+            userData,
         );
-        expect(creationResult).to.deep.equal({ error: 'storage unsuccessful' });
+        expect(creationResult).to.deep.equal({error: 'storage unsuccessful'});
       });
       describe('errors through validation requirements', () => {
         let schemaType;
@@ -277,11 +277,9 @@ describe('SubmissionsService', () => {
           const result = confetti;
           schemaType = 'confetti';
 
-          const mockFirestore = generateMockFirestore({
-            functionality,
-            result,
-          });
+          const mockFirestore = generateMockFirestore({functionality, result});
           submissionsService = new SubmissionsService(mockFirestore);
+
         });
         it('missing type', async () => {
           const userData = {
@@ -292,12 +290,10 @@ describe('SubmissionsService', () => {
           };
 
           const creationResult = await submissionsService.createSubmission(
-            schemaType,
-            userData,
+              schemaType,
+              userData,
           );
-          expect(creationResult).to.deep.equal({
-            error: 'storage unsuccessful',
-          });
+          expect(creationResult).to.deep.equal({error: 'storage unsuccessful'});
         });
         it('missing body', async () => {
           const userData = {
@@ -308,12 +304,10 @@ describe('SubmissionsService', () => {
           };
 
           const creationResult = await submissionsService.createSubmission(
-            schemaType,
-            userData,
+              schemaType,
+              userData,
           );
-          expect(creationResult).to.deep.equal({
-            error: 'storage unsuccessful',
-          });
+          expect(creationResult).to.deep.equal({error: 'storage unsuccessful'});
         });
         it('missing name', async () => {
           const userData = {
@@ -324,12 +318,10 @@ describe('SubmissionsService', () => {
           };
 
           const creationResult = await submissionsService.createSubmission(
-            schemaType,
-            userData,
+              schemaType,
+              userData,
           );
-          expect(creationResult).to.deep.equal({
-            error: 'storage unsuccessful',
-          });
+          expect(creationResult).to.deep.equal({error: 'storage unsuccessful'});
         });
         it('missing email', async () => {
           const userData = {
@@ -340,12 +332,10 @@ describe('SubmissionsService', () => {
           };
 
           const creationResult = await submissionsService.createSubmission(
-            schemaType,
-            userData,
+              schemaType,
+              userData,
           );
-          expect(creationResult).to.deep.equal({
-            error: 'storage unsuccessful',
-          });
+          expect(creationResult).to.deep.equal({error: 'storage unsuccessful'});
         });
         it('missing date', async () => {
           const userData = {
@@ -356,14 +346,12 @@ describe('SubmissionsService', () => {
           };
 
           const creationResult = await submissionsService.createSubmission(
-            schemaType,
-            userData,
+              schemaType,
+              userData,
           );
-          expect(creationResult).to.deep.equal({
-            error: 'storage unsuccessful',
-          });
+          expect(creationResult).to.deep.equal({error: 'storage unsuccessful'});
         });
-      });
-    });
+      })
+    })
   });
 });
