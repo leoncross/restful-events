@@ -1,0 +1,49 @@
+{
+  "name": "nest-babel-starter",
+  "version": "1.0.0",
+  "description": "Nest Babel starter repository",
+  "license": "MIT",
+  "scripts": {
+    "format": "prettier --write \"**/*.js\"",
+    "start": "babel-node index.js",
+    "start:dev": "nodemon",
+    "test": "jest",
+    "test:cov": "jest --coverage",
+    "test:e2e": "jest --config ./test/jest-e2e.json"
+  },
+  "dependencies": {
+    "@nestjs/common": "^6.7.2",
+    "@nestjs/core": "^6.7.2",
+    "@nestjs/microservices": "^6.7.2",
+    "@nestjs/platform-express": "^6.7.2",
+    "@nestjs/websockets": "^6.7.2",
+    "firebase-admin": "^8.9.2",
+    "firebase-functions": "^3.3.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/node": "^7.6.2",
+    "@babel/plugin-proposal-decorators": "^7.6.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/register": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "@nestjs/testing": "^6.7.2",
+    "jest": "25.1.0",
+    "nodemon": "^1.19.2",
+    "prettier": "^1.18.2",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "moduleFileExtensions": [
+      "js",
+      "json"
+    ],
+    "rootDir": "src",
+    "testRegex": ".spec.js$",
+    "coverageDirectory": "../coverage"
+  }
+}
