@@ -116,9 +116,11 @@ describe('DefinitionsService', () => {
       const mockFirestore = generateMockFirestore({functionality});
       definitionsService = new DefinitionsService(mockFirestore);
 
-      await definitionsService.updateSchema(confetti, infoToPublish).then(data => {
-        expect(data).to.deep.equal({success: 'schema updated'});
-      });
+      await definitionsService
+          .updateSchema(confetti, infoToPublish)
+          .then(data => {
+            expect(data).to.deep.equal({success: 'schema updated'});
+          });
     });
   });
   describe('/DELETE', () => {

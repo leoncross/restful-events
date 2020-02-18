@@ -30,11 +30,11 @@ describe('DefinitionsController', () => {
     );
     definitionsServiceUpdateSchemaStub = sinon.stub(
         definitionsService,
-        'updateSchema'
+        'updateSchema',
     );
     definitionsServiceDeleteSchemaStub = sinon.stub(
         definitionsService,
-        'deleteSchema'
+        'deleteSchema',
     );
 
     definitionsController = new DefinitionsController(definitionsService);
@@ -78,10 +78,7 @@ describe('DefinitionsController', () => {
       let getType = {schema: 'confetti'};
 
       definitionsController.deleteSchema(getType);
-      expect(definitionsServiceDeleteSchemaStub).calledOnceWith(
-          getType.schema
-      );
+      expect(definitionsServiceDeleteSchemaStub).calledOnceWith(getType.schema);
     });
   });
-
 });
