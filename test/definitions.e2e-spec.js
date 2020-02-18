@@ -1,7 +1,7 @@
 import request from 'supertest';
 import {Test} from '@nestjs/testing';
 import {AppModule} from '../src/app.module';
-import {confetti, magician, magicianAltered} from './testHelpers/resources.js';
+import {confetti, magician, magicianAltered,} from './testHelpers/resources.js';
 
 describe('Definitions e2e', () => {
   const ERROR_NO_RESULTS_FOUND = {error: 'no results found'};
@@ -21,7 +21,6 @@ describe('Definitions e2e', () => {
     await app.init();
   });
 
-
   describe('/GET', () => {
     it('returns requested schema', async () => {
       return await request(app.getHttpServer())
@@ -31,7 +30,6 @@ describe('Definitions e2e', () => {
     });
 
     it('no results found', async () => {
-
       return await request(app.getHttpServer())
           .get('/definitions/?schema=doesntExist')
           .expect(200)
@@ -40,7 +38,6 @@ describe('Definitions e2e', () => {
   });
   describe('/POST /PUT /GET /DELETE', () => {
     it('posts, updates, gets then removes the updated schema', async () => {
-
       await request(app.getHttpServer())
           .post('/definitions/?schema=magician')
           .send({data: magician})

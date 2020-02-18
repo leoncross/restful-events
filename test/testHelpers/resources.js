@@ -203,4 +203,3 @@ export const magicianAltered = {
     {title: 'Get Quotes', type: 'submit'},
   ],
 };
-

@@ -54,7 +54,7 @@ export class DefinitionsService {
   }
 
   async updateSchema(type, schema) {
-      return await this.uploadSchema(type, schema, SUCCESS_SCHEMA_UPDATED);
+    return await this.uploadSchema(type, schema, SUCCESS_SCHEMA_UPDATED);
   }
 
   async deleteSchema(type) {
