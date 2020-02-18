@@ -8,6 +8,7 @@ const ERROR_GETTING_DOCUMENT = {error: 'error getting document'};
 const ERROR_SCHEMA_EXISTS = {error: 'document type exists'};
 
 const SUCCESS_SCHEMA_ADDED = {success: 'schema added'};
+const SUCCESS_SCHEMA_UPDATED = {success: 'schema updated'};
 
 @Injectable()
 export class DefinitionsService {
@@ -42,13 +43,20 @@ export class DefinitionsService {
         });
   }
 
-  async createSchema(type, schema) {
-    const parsedSchema = JSON.parse(schema);
-    let doesSchemaExist = await this.getSchema(type);
+    async createSchema(type, schema) {
+        const parsedSchema = JSON.parse(schema);
+        let doesSchemaExist = await this.getSchema(type);
 
-    if (doesSchemaExist === ERROR_NO_RESULTS_FOUND) {
-      return await this.uploadSchema(type, parsedSchema, SUCCESS_SCHEMA_ADDED);
+        if (doesSchemaExist === ERROR_NO_RESULTS_FOUND) {
+            return await this.uploadSchema(type, parsedSchema, SUCCESS_SCHEMA_ADDED);
+        }
+        return ERROR_SCHEMA_EXISTS;
     }
-    return ERROR_SCHEMA_EXISTS;
-  }
+
+    async updateSchema(type, schema) {
+        const parsedSchema = JSON.parse(schema);
+
+        return await this.uploadSchema(type, parsedSchema, SUCCESS_SCHEMA_UPDATED);
+    }
+
 }

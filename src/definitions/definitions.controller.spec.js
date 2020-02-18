@@ -13,6 +13,7 @@ describe('DefinitionsController', () => {
   let definitionsService;
   let definitionsServiceGetSchemaStub;
   let definitionsServiceCreateSchemaStub;
+  let definitionsServiceUpdateSchemaStub;
 
   beforeEach(() => {
     fakeDb = 'fakeDb';
@@ -26,6 +27,11 @@ describe('DefinitionsController', () => {
     definitionsServiceCreateSchemaStub = sinon.stub(
         definitionsService,
         'createSchema',
+    );
+
+    definitionsServiceUpdateSchemaStub = sinon.stub(
+        definitionsService,
+        'updateSchema'
     );
 
     definitionsController = new DefinitionsController(definitionsService);
@@ -47,6 +53,18 @@ describe('DefinitionsController', () => {
 
       definitionsController.createSchema(getType, req);
       expect(definitionsServiceCreateSchemaStub).calledOnceWith(
+          getType.schema,
+          req.body.data,
+      );
+    });
+  });
+  describe('/Put', () => {
+    it('calls updateSchema on DefinitionsService', () => {
+      let getType = {schema: 'confetti'};
+      let req = {body: {data: 'schema'}};
+
+      definitionsController.updateSchema(getType, req);
+      expect(definitionsServiceUpdateSchemaStub).calledOnceWith(
           getType.schema,
           req.body.data,
       );

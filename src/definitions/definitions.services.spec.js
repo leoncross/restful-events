@@ -110,4 +110,16 @@ describe('DefinitionsService', () => {
           });
     });
   });
+  describe('/UPDATE', () => {
+    it('updates schema', async () => {
+      const functionality = 'postSuccessfully';
+      const mockFirestore = generateMockFirestore({functionality});
+      definitionsService = new DefinitionsService(mockFirestore);
+
+      await definitionsService.updateSchema(confetti, infoToPublish).then(data => {
+        expect(data).to.deep.equal({success: 'schema updated'});
+      });
+    });
+  });
+
 });
