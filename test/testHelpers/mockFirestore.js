@@ -57,6 +57,14 @@ function postThrows() {
   };
 }
 
+function removeSchema() {
+  return {
+    delete: () => {
+      return Promise.resolve();
+    },
+  };
+}
+
 export default function generateMockFirestore({functionality, result}) {
   let behaviour;
 
@@ -79,6 +87,10 @@ export default function generateMockFirestore({functionality, result}) {
 
     case 'postThrows':
       behaviour = postThrows();
+      break;
+
+    case 'removeSchema':
+      behaviour = removeSchema();
       break;
 
     default:

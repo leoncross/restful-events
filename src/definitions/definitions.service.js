@@ -9,6 +9,7 @@ const ERROR_SCHEMA_EXISTS = {error: 'document type exists'};
 
 const SUCCESS_SCHEMA_ADDED = {success: 'schema added'};
 const SUCCESS_SCHEMA_UPDATED = {success: 'schema updated'};
+const SUCCESS_SCHEMA_REMOVED = {success: 'schema removed'};
 
 @Injectable()
 export class DefinitionsService {
@@ -59,4 +60,11 @@ export class DefinitionsService {
         return await this.uploadSchema(type, parsedSchema, SUCCESS_SCHEMA_UPDATED);
     }
 
+    async deleteSchema(type) {
+        await this.db
+            .collection(type)
+            .doc(SCHEMA)
+            .delete();
+        return SUCCESS_SCHEMA_REMOVED;
+    }
 }

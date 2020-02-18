@@ -14,6 +14,7 @@ describe('DefinitionsController', () => {
   let definitionsServiceGetSchemaStub;
   let definitionsServiceCreateSchemaStub;
   let definitionsServiceUpdateSchemaStub;
+  let definitionsServiceDeleteSchemaStub;
 
   beforeEach(() => {
     fakeDb = 'fakeDb';
@@ -23,15 +24,17 @@ describe('DefinitionsController', () => {
         definitionsService,
         'getSchema',
     );
-
     definitionsServiceCreateSchemaStub = sinon.stub(
         definitionsService,
         'createSchema',
     );
-
     definitionsServiceUpdateSchemaStub = sinon.stub(
         definitionsService,
         'updateSchema'
+    );
+    definitionsServiceDeleteSchemaStub = sinon.stub(
+        definitionsService,
+        'deleteSchema'
     );
 
     definitionsController = new DefinitionsController(definitionsService);
@@ -70,4 +73,15 @@ describe('DefinitionsController', () => {
       );
     });
   });
+  describe('/Delete', () => {
+    it('calls deleteSchema on DefinitionsService', () => {
+      let getType = {schema: 'confetti'};
+
+      definitionsController.deleteSchema(getType);
+      expect(definitionsServiceDeleteSchemaStub).calledOnceWith(
+          getType.schema
+      );
+    });
+  });
+
 });

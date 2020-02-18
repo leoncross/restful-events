@@ -1,4 +1,4 @@
-import {Bind, Controller, Get, Post, Put, Query, Req} from '@nestjs/common';
+import {Bind, Controller, Delete, Get, Post, Put, Query, Req} from '@nestjs/common';
 import {DefinitionsService} from './definitions.service';
 
 @Controller('definitions')
@@ -26,5 +26,9 @@ export class DefinitionsController {
     return this.definitionsService.updateSchema(query.schema, req.body.data);
   }
 
-
+  @Delete()
+  @Bind(Query())
+  deleteSchema(query) {
+    return this.definitionsService.deleteSchema(query.schema);
+  }
 }

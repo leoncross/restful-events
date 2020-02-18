@@ -121,5 +121,15 @@ describe('DefinitionsService', () => {
       });
     });
   });
+  describe('/DELETE', () => {
+    it('deletes schema', async () => {
+      const functionality = 'removeSchema';
+      const mockFirestore = generateMockFirestore({functionality});
+      definitionsService = new DefinitionsService(mockFirestore);
 
+      await definitionsService.deleteSchema(confetti).then(data => {
+        expect(data).to.deep.equal({success: 'schema removed'});
+      });
+    });
+  });
 });
