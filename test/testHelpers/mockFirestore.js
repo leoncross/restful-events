@@ -1,4 +1,4 @@
-function getSuccessFunctionality(result) {
+function getSuccess(result) {
   return {
     get: () => {
       return Promise.resolve({
@@ -11,7 +11,7 @@ function getSuccessFunctionality(result) {
   };
 }
 
-function getNoResultsFunctionality() {
+function getNoResults() {
   return {
     get: () => {
       return Promise.resolve({
@@ -21,9 +21,37 @@ function getNoResultsFunctionality() {
   };
 }
 
-function getThrowsFunctionality() {
+function getThrows() {
   return {
     get: () => {
+      return Promise.reject({});
+    },
+  };
+}
+
+function postSuccessfully() {
+  return {
+    get: () => {
+      return Promise.resolve({
+        exists: false,
+        data: () => {
+        },
+      });
+    },
+    set: () => {
+      return Promise.resolve();
+    },
+  };
+}
+
+function postThrows() {
+  return {
+    get: () => {
+      return Promise.resolve({
+        exists: false,
+      });
+    },
+    set: () => {
       return Promise.reject({});
     },
   };
@@ -34,15 +62,23 @@ export default function generateMockFirestore({functionality, result}) {
 
   switch (functionality) {
     case 'getSuccess':
-      behaviour = getSuccessFunctionality(result);
+      behaviour = getSuccess(result);
       break;
 
     case 'getNoResults':
-      behaviour = getNoResultsFunctionality();
+      behaviour = getNoResults();
       break;
 
     case 'getThrows':
-      behaviour = getThrowsFunctionality();
+      behaviour = getThrows();
+      break;
+
+    case 'postSuccessfully':
+      behaviour = postSuccessfully();
+      break;
+
+    case 'postThrows':
+      behaviour = postThrows();
       break;
 
     default:

@@ -12,6 +12,7 @@ describe('DefinitionsController', () => {
   let definitionsController;
   let definitionsService;
   let definitionsServiceGetSchemaStub;
+  let definitionsServiceCreateSchemaStub;
 
   beforeEach(() => {
     fakeDb = 'fakeDb';
@@ -22,16 +23,33 @@ describe('DefinitionsController', () => {
         'getSchema',
     );
 
+    definitionsServiceCreateSchemaStub = sinon.stub(
+        definitionsService,
+        'createSchema',
+    );
+
     definitionsController = new DefinitionsController(definitionsService);
   });
 
   describe('/Get', () => {
-    it('calls definitions service getSchema with passed arguments', () => {
+    it('calls getSchema on DefinitionsService', () => {
       let getType = {schema: 'confetti'};
 
       definitionsController.getSchema(getType);
 
       expect(definitionsServiceGetSchemaStub).calledOnceWith(getType.schema);
+    });
+  });
+  describe('/Post', () => {
+    it('calls createSchema on DefinitionsService', () => {
+      let getType = {schema: 'confetti'};
+      let req = {body: {data: 'schema'}};
+
+      definitionsController.createSchema(getType, req);
+      expect(definitionsServiceCreateSchemaStub).calledOnceWith(
+          getType.schema,
+          req.body.data,
+      );
     });
   });
 });

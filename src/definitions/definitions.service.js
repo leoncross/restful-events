@@ -2,8 +2,12 @@ import {Injectable} from '@nestjs/common';
 import * as admin from 'firebase-admin';
 
 const SCHEMA = 'schema';
+
 const ERROR_NO_RESULTS_FOUND = {error: 'no results found'};
 const ERROR_GETTING_DOCUMENT = {error: 'error getting document'};
+const ERROR_SCHEMA_EXISTS = {error: 'document type exists'};
+
+const SUCCESS_SCHEMA_ADDED = {success: 'schema added'};
 
 @Injectable()
 export class DefinitionsService {
@@ -23,5 +27,28 @@ export class DefinitionsService {
         .catch(() => {
           return ERROR_GETTING_DOCUMENT;
         });
+  }
+
+  async uploadSchema(type, schema, successMessage) {
+    return await this.db
+        .collection(type)
+        .doc(SCHEMA)
+        .set(schema)
+        .then(() => {
+          return successMessage;
+        })
+        .catch(() => {
+          return ERROR_GETTING_DOCUMENT;
+        });
+  }
+
+  async createSchema(type, schema) {
+    const parsedSchema = JSON.parse(schema);
+    let doesSchemaExist = await this.getSchema(type);
+
+    if (doesSchemaExist === ERROR_NO_RESULTS_FOUND) {
+      return await this.uploadSchema(type, parsedSchema, SUCCESS_SCHEMA_ADDED);
+    }
+    return ERROR_SCHEMA_EXISTS;
   }
 }
