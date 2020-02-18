@@ -45,19 +45,16 @@ export class DefinitionsService {
   }
 
   async createSchema(type, schema) {
-    const parsedSchema = JSON.parse(schema);
     let doesSchemaExist = await this.getSchema(type);
 
     if (doesSchemaExist === ERROR_NO_RESULTS_FOUND) {
-      return await this.uploadSchema(type, parsedSchema, SUCCESS_SCHEMA_ADDED);
+      return await this.uploadSchema(type, schema, SUCCESS_SCHEMA_ADDED);
     }
     return ERROR_SCHEMA_EXISTS;
   }
 
   async updateSchema(type, schema) {
-    const parsedSchema = JSON.parse(schema);
-
-    return await this.uploadSchema(type, parsedSchema, SUCCESS_SCHEMA_UPDATED);
+      return await this.uploadSchema(type, schema, SUCCESS_SCHEMA_UPDATED);
   }
 
   async deleteSchema(type) {
