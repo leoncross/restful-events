@@ -33,9 +33,9 @@ function postSuccessfully() {
   return {
     get: () => {
       return Promise.resolve({
-        exists: false,
-        data: () => {
-        },
+          exists: false,
+          data: () => {
+          },
       });
     },
     set: () => {
@@ -66,16 +66,16 @@ function removeSchema() {
 }
 
 export default function generateMockFirestore({functionality, result}) {
-  let behaviour;
+    let behaviour;
 
-  switch (functionality) {
-    case 'getSuccess':
-      behaviour = getSuccess(result);
-      break;
+    switch (functionality) {
+        case 'getSuccess':
+            behaviour = getSuccess(result);
+            break;
 
-    case 'getNoResults':
-      behaviour = getNoResults();
-      break;
+        case 'getNoResults':
+            behaviour = getNoResults();
+            break;
 
     case 'getThrows':
       behaviour = getThrows();
@@ -94,7 +94,7 @@ export default function generateMockFirestore({functionality, result}) {
       break;
 
     default:
-      // no default
+        // no default
   }
 
   return {

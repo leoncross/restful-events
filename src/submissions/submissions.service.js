@@ -1,9 +1,9 @@
-import {Injectable} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 
 const SCHEMA = 'schema';
 
-const ERROR_NO_RESULTS_FOUND = {error: 'no results found'};
+const ERROR_NO_RESULTS_FOUND = { error: 'no results found' };
 
 @Injectable()
 export default class SubmissionsService {
@@ -13,13 +13,13 @@ export default class SubmissionsService {
 
   async getSchemaType(schemaType) {
     return await this.db
-        .collection(schemaType)
-        .doc(SCHEMA)
-        .get()
-        .then(doc => {
-          if (!doc.exists) return ERROR_NO_RESULTS_FOUND;
-          return doc.data();
-        });
+      .collection(schemaType)
+      .doc(SCHEMA)
+      .get()
+      .then(doc => {
+        if (!doc.exists) return ERROR_NO_RESULTS_FOUND;
+        return doc.data();
+      });
   }
 
   matchesRequired(schemaElement, submission) {
@@ -43,6 +43,9 @@ export default class SubmissionsService {
   }
 
   matchesLength(schemaElement, submissionValue) {
+    if (!submissionValue) {
+      return false;
+    }
     if (schemaElement.validation.maxLength) {
       return submissionValue.length <= schemaElement.validation.maxLength;
     }
@@ -50,6 +53,9 @@ export default class SubmissionsService {
   }
 
   matchesPattern(schemaElement, submissionValue) {
+    if (!submissionValue) {
+      return false;
+    }
     if (schemaElement.validation.pattern) {
       return !!submissionValue.match(schemaElement.validation.pattern);
     }
@@ -75,7 +81,7 @@ export default class SubmissionsService {
   async createSubmission(schemaType, submission) {
     const foundSchema = await this.getSchemaType(schemaType);
     if (!this.hasFoundSchema(foundSchema)) {
-      return {error: 'storage unsuccessful'};
+      return { error: 'storage unsuccessful' };
     }
 
     const schema = foundSchema[schemaType];
@@ -104,7 +110,7 @@ export default class SubmissionsService {
 
     // TODO: post submission to DB
 
-    if (!validation) return {error: 'storage unsuccessful'};
-    return {success: 'storage successful'};
+    if (!validation) return { error: 'storage unsuccessful' };
+    return { success: 'storage successful' };
   }
 }
