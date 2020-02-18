@@ -3,7 +3,7 @@ import sinonChai from 'sinon-chai';
 
 import SubmissionsService from './submissions.service';
 import {confetti} from '../../test/testHelpers/resources';
-import generateMockFirestore from "../../test/testHelpers/mockFirestore";
+import generateMockFirestore from '../../test/testHelpers/mockFirestore';
 
 const expect = chai.expect;
 chai.use(sinonChai);
@@ -233,7 +233,10 @@ describe('SubmissionsService', () => {
       const mockFirestore = generateMockFirestore({functionality, result});
       submissionsService = new SubmissionsService(mockFirestore);
 
-      const creationResult = await submissionsService.createSubmission(schemaType, userData);
+      const creationResult = await submissionsService.createSubmission(
+          schemaType,
+          userData,
+      );
       expect(creationResult).to.deep.equal({success: 'storage successful'});
     });
 
@@ -255,9 +258,11 @@ describe('SubmissionsService', () => {
       const mockFirestore = generateMockFirestore({functionality, result});
       submissionsService = new SubmissionsService(mockFirestore);
 
-      const creationResult = await submissionsService.createSubmission(schemaType, userData);
+      const creationResult = await submissionsService.createSubmission(
+          schemaType,
+          userData,
+      );
       expect(creationResult).to.deep.equal({error: 'storage unsuccessful'});
-
     });
 
     it('returns error that storage was not successful - error in submission', async () => {
@@ -278,7 +283,10 @@ describe('SubmissionsService', () => {
       const mockFirestore = generateMockFirestore({functionality, result});
       submissionsService = new SubmissionsService(mockFirestore);
 
-      const creationResult = await submissionsService.createSubmission(schemaType, userData);
+      const creationResult = await submissionsService.createSubmission(
+          schemaType,
+          userData,
+      );
       expect(creationResult).to.deep.equal({error: 'storage unsuccessful'});
     });
   });

@@ -4,7 +4,6 @@ import * as admin from 'firebase-admin';
 const SCHEMA = 'schema';
 
 const ERROR_NO_RESULTS_FOUND = {error: 'no results found'};
-const ERROR_GETTING_DOCUMENT = {error: 'error getting document'};
 
 @Injectable()
 export default class SubmissionsService {
@@ -20,7 +19,7 @@ export default class SubmissionsService {
         .then(doc => {
           if (!doc.exists) return ERROR_NO_RESULTS_FOUND;
           return doc.data();
-        })
+        });
   }
 
   matchesRequired(schemaElement, submission) {
@@ -70,13 +69,13 @@ export default class SubmissionsService {
   }
 
   hasFoundSchema(schema) {
-    return !("error" in schema);
+    return !('error' in schema);
   }
 
   async createSubmission(schemaType, submission) {
     const foundSchema = await this.getSchemaType(schemaType);
     if (!this.hasFoundSchema(foundSchema)) {
-      return {error: 'storage unsuccessful'}
+      return {error: 'storage unsuccessful'};
     }
 
     const schema = foundSchema[schemaType];
@@ -88,14 +87,18 @@ export default class SubmissionsService {
 
     for (let i = 0; i < schema.length; i++) {
       if (!validation) break;
-      if ("key" in schema[i]) {
+      if ('key' in schema[i]) {
         const schemaElement = schema[i];
         const submissionValue = submission[schemaElement.key];
         if (!this.matchesRequired(schemaElement, submission)) failsValidation();
-        if (!this.matchesOptions(schemaElement, submissionValue)) failsValidation();
-        if (!this.matchesLength(schemaElement, submissionValue)) failsValidation();
-        if (!this.matchesPattern(schemaElement, submissionValue)) failsValidation();
-        if (!this.matchesDate(schemaElement, submissionValue)) failsValidation();
+        if (!this.matchesOptions(schemaElement, submissionValue))
+          failsValidation();
+        if (!this.matchesLength(schemaElement, submissionValue))
+          failsValidation();
+        if (!this.matchesPattern(schemaElement, submissionValue))
+          failsValidation();
+        if (!this.matchesDate(schemaElement, submissionValue))
+          failsValidation();
       }
     }
 
