@@ -1,3 +1,5 @@
+improve error handling (currently if changes, would have to change in multiple files)
+
 ## Installation
 
 ```bash

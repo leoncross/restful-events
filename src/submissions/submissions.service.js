@@ -1,9 +1,13 @@
-import {Injectable} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 
 const SCHEMA = 'schema';
+const ERROR = 'error';
+const KEY = 'key';
 
-const ERROR_NO_RESULTS_FOUND = {error: 'no results found'};
+const STORAGE_SUCCESSFUL = { success: 'storage successful' };
+const ERROR_NO_RESULTS_FOUND = { error: 'no results found' };
+const ERROR_STORAGE_UNSUCCESSFUL = { error: 'storage unsuccessful' };
 
 @Injectable()
 export default class SubmissionsService {
@@ -13,22 +17,22 @@ export default class SubmissionsService {
 
   async getSchemaType(schemaType) {
     return await this.db
-        .collection(schemaType)
-        .doc(SCHEMA)
-        .get()
-        .then(doc => {
-          if (!doc.exists) return ERROR_NO_RESULTS_FOUND;
-          return doc.data();
-        });
+      .collection(schemaType)
+      .doc(SCHEMA)
+      .get()
+      .then(doc => {
+        if (!doc.exists) return ERROR_NO_RESULTS_FOUND;
+        return doc.data();
+      });
   }
 
   async uploadSubmission(type, submission) {
     return await this.db
-        .collection(type)
-        .doc()
-        .set(submission)
+      .collection(type)
+      .doc()
+      .set(submission)
+      .then(doc => {});
   }
-
 
   matchesRequired(schemaElement, submission) {
     if (schemaElement.validation.required && submission[schemaElement.key]) {
@@ -51,9 +55,7 @@ export default class SubmissionsService {
   }
 
   matchesLength(schemaElement, submissionValue) {
-    if (!submissionValue) {
-      return false
-    }
+    if (!submissionValue) return false;
     if (schemaElement.validation.maxLength) {
       return submissionValue.length <= schemaElement.validation.maxLength;
     }
@@ -61,9 +63,7 @@ export default class SubmissionsService {
   }
 
   matchesPattern(schemaElement, submissionValue) {
-    if (!submissionValue) {
-      return false
-    }
+    if (!submissionValue) return false;
     if (schemaElement.validation.pattern) {
       return !!submissionValue.match(schemaElement.validation.pattern);
     }
@@ -71,9 +71,7 @@ export default class SubmissionsService {
   }
 
   matchesDate(schemaElement, submissionValue) {
-    if (!submissionValue) {
-      return false
-    }
+    if (!submissionValue) return false;
     if (schemaElement.validation.minDate) {
       const submissionValueDate = new Date(submissionValue);
       const schemaMinDate = new Date(schemaElement.validation.minDate);
@@ -85,12 +83,12 @@ export default class SubmissionsService {
     return true;
   }
 
-  hasFoundSchema(schema) {
-    return !('error' in schema);
+  noSchemaFound(schema) {
+    return ERROR in schema;
   }
 
   handleValidationRequirements(schema, submission) {
-    const failsValidation = () => {
+    const failValidation = () => {
       validation = false;
     };
 
@@ -98,35 +96,31 @@ export default class SubmissionsService {
 
     for (let i = 0; i < schema.length; i++) {
       if (!validation) break;
-      if ('key' in schema[i]) {
-        const schemaElement = schema[i];
-        const submissionValue = submission[schemaElement.key];
-        if (!this.matchesRequired(schemaElement, submission)) failsValidation();
-        if (!this.matchesOptions(schemaElement, submissionValue))
-          failsValidation();
-        if (!this.matchesLength(schemaElement, submissionValue))
-          failsValidation();
-        if (!this.matchesPattern(schemaElement, submissionValue))
-          failsValidation();
-        if (!this.matchesDate(schemaElement, submissionValue))
-          failsValidation();
+      if (KEY in schema[i]) {
+        const schemaSection = schema[i];
+        const subValue = submission[schemaSection.key];
+        if (!this.matchesRequired(schemaSection, submission)) failValidation();
+        if (!this.matchesOptions(schemaSection, subValue)) failValidation();
+        if (!this.matchesLength(schemaSection, subValue)) failValidation();
+        if (!this.matchesPattern(schemaSection, subValue)) failValidation();
+        if (!this.matchesDate(schemaSection, subValue)) failValidation();
       }
     }
-    return validation
+    return validation;
   }
-
 
   async createSubmission(schemaType, submission) {
     const foundSchema = await this.getSchemaType(schemaType);
-    if (!this.hasFoundSchema(foundSchema)) {
-      return {error: 'storage unsuccessful'};
+    if (this.noSchemaFound(foundSchema)) {
+      return ERROR_STORAGE_UNSUCCESSFUL;
     }
     const schema = foundSchema[schemaType];
+
     const validation = this.handleValidationRequirements(schema, submission);
 
-    if (!validation) return {error: 'storage unsuccessful'};
+    if (!validation) return ERROR_STORAGE_UNSUCCESSFUL;
 
     await this.uploadSubmission(schemaType, submission);
-    return {success: 'storage successful'};
+    return STORAGE_SUCCESSFUL;
   }
 }

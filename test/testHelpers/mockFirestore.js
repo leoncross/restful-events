@@ -33,9 +33,8 @@ function postSuccessfully() {
   return {
     get: () => {
       return Promise.resolve({
-          exists: false,
-          data: () => {
-          },
+        exists: false,
+        data: () => {},
       });
     },
     set: () => {
@@ -65,17 +64,33 @@ function removeSchema() {
   };
 }
 
-export default function generateMockFirestore({functionality, result}) {
-    let behaviour;
+function getSuccessfullyPostSuccessfully(result) {
+  return {
+    get: () => {
+      return Promise.resolve({
+        exists: true,
+        data: () => {
+          return result;
+        },
+      });
+    },
+    set: () => {
+      return Promise.resolve();
+    },
+  };
+}
 
-    switch (functionality) {
-        case 'getSuccess':
-            behaviour = getSuccess(result);
-            break;
+export default function generateMockFirestore({ functionality, result }) {
+  let behaviour;
 
-        case 'getNoResults':
-            behaviour = getNoResults();
-            break;
+  switch (functionality) {
+    case 'getSuccess':
+      behaviour = getSuccess(result);
+      break;
+
+    case 'getNoResults':
+      behaviour = getNoResults();
+      break;
 
     case 'getThrows':
       behaviour = getThrows();
@@ -93,8 +108,11 @@ export default function generateMockFirestore({functionality, result}) {
       behaviour = removeSchema();
       break;
 
+    case 'getSuccessfullyPostSuccessfully':
+      behaviour = getSuccessfullyPostSuccessfully(result);
+
     default:
-        // no default
+    // no default
   }
 
   return {
