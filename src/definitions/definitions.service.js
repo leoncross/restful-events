@@ -32,10 +32,11 @@ export class DefinitionsService {
   }
 
   async uploadSchema(type, schema, successMessage) {
+    let stringedSchema = JSON.parse(schema);
     return await this.db
         .collection(type)
         .doc(SCHEMA)
-        .set(schema)
+        .set(stringedSchema)
         .then(() => {
           return successMessage;
         })

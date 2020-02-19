@@ -1,5 +1,5 @@
 import {Bind, Controller, Post, Query, Req} from '@nestjs/common';
-import {SubmissionsService} from './submissions.service.js';
+import SubmissionsService from './submissions.service.js';
 
 @Controller('submissions')
 export default class SubmissionsController {
@@ -14,5 +14,7 @@ export default class SubmissionsController {
         query.schema,
         req.body.data,
     );
+
+    // TODO: handle https responses
   }
 }

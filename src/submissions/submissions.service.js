@@ -22,6 +22,14 @@ export default class SubmissionsService {
         });
   }
 
+  async uploadSubmission(type, submission) {
+    return await this.db
+        .collection(type)
+        .doc()
+        .set(submission)
+  }
+
+
   matchesRequired(schemaElement, submission) {
     if (schemaElement.validation.required && submission[schemaElement.key]) {
       return true;
@@ -81,18 +89,12 @@ export default class SubmissionsService {
     return !('error' in schema);
   }
 
-  async createSubmission(schemaType, submission) {
-    const foundSchema = await this.getSchemaType(schemaType);
-    if (!this.hasFoundSchema(foundSchema)) {
-      return {error: 'storage unsuccessful'};
-    }
-
-    const schema = foundSchema[schemaType];
-    let validation = true;
-
+  handleValidationRequirements(schema, submission) {
     const failsValidation = () => {
       validation = false;
     };
+
+    let validation = true;
 
     for (let i = 0; i < schema.length; i++) {
       if (!validation) break;
@@ -110,10 +112,21 @@ export default class SubmissionsService {
           failsValidation();
       }
     }
+    return validation
+  }
 
-    // TODO: post submission to DB
+
+  async createSubmission(schemaType, submission) {
+    const foundSchema = await this.getSchemaType(schemaType);
+    if (!this.hasFoundSchema(foundSchema)) {
+      return {error: 'storage unsuccessful'};
+    }
+    const schema = foundSchema[schemaType];
+    const validation = this.handleValidationRequirements(schema, submission);
 
     if (!validation) return {error: 'storage unsuccessful'};
+
+    await this.uploadSubmission(schemaType, submission);
     return {success: 'storage successful'};
   }
 }
