@@ -110,6 +110,7 @@ export default function generateMockFirestore({ functionality, result }) {
 
     case 'getSuccessfullyPostSuccessfully':
       behaviour = getSuccessfullyPostSuccessfully(result);
+      break;
 
     default:
     // no default

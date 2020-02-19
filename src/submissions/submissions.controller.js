@@ -1,16 +1,7 @@
-import {
-  Bind,
-  Controller,
-  Post,
-  Query,
-  Req,
-  HttpException,
-  HttpCode,
-} from '@nestjs/common';
+import {Bind, Controller, HttpCode, HttpException, Post, Query, Req,} from '@nestjs/common';
 import SubmissionsService from './submissions.service.js';
 
-const STORAGE_SUCCESSFUL = { success: 'storage successful' };
-const ERROR_STORAGE_UNSUCCESSFUL = { error: 'storage unsuccessful' };
+import {STORAGE_SUCCESSFUL} from '../resources/errorHandlers';
 
 @Controller('submissions')
 export default class SubmissionsController {
@@ -22,8 +13,6 @@ export default class SubmissionsController {
   @HttpCode(200)
   @Bind(Query(), Req())
   async createSubmission(query, req) {
-    const hasError = response => 'error' in schema;
-
     const schema = query.schema;
     const submission = req.body.data;
 
@@ -32,8 +21,8 @@ export default class SubmissionsController {
       submission,
     );
     if ('error' in response) {
-      return new HttpException('storage unsuccessful', 400);
+      throw new HttpException('storage unsuccessful', 400);
     }
-    return response;
+    return STORAGE_SUCCESSFUL;
   }
 }

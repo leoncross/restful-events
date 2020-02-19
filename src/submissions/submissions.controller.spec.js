@@ -3,14 +3,11 @@ import sinonChai from 'sinon-chai';
 import sinon from 'sinon';
 import SubmissionsService from './submissions.service';
 import SubmissionsController from './submissions.controller';
+import {ERROR_STORAGE_UNSUCCESSFUL, STORAGE_SUCCESSFUL,} from '../resources/errorHandlers';
+import {HttpException} from '@nestjs/common';
 
 const expect = chai.expect;
 chai.use(sinonChai);
-
-const ERROR_STORAGE_UNSUCCESSFUL = {
-  Error: { message: 'storage unsuccessful', status: 400 },
-};
-const STORAGE_SUCCESSFUL = { success: 'storage successful' };
 
 describe('SubmissionsController', () => {
   describe('/Get', () => {
@@ -34,37 +31,39 @@ describe('SubmissionsController', () => {
       );
 
       expect(submissionsServiceCreateSubmissionStub).calledOnceWith(
-        query.schema,
-        req.body.data,
+          query.schema,
+          req.body.data,
       );
-      expect(createSubmissionResponse).to.equal(STORAGE_SUCCESSFUL);
+      expect(createSubmissionResponse).to.deep.equal(STORAGE_SUCCESSFUL);
     });
 
     it('calls getSchema on SubmissionsController and returns storage unsuccessful', async () => {
       const fakeDb = 'fakeDb';
       const submissionsService = new SubmissionsService(fakeDb);
       const submissionsServiceCreateSubmissionStub = sinon
-        .stub(submissionsService, 'createSubmission')
-        .resolves(ERROR_STORAGE_UNSUCCESSFUL);
+          .stub(submissionsService, 'createSubmission')
+          .resolves(ERROR_STORAGE_UNSUCCESSFUL);
 
       const submissionsController = new SubmissionsController(
-        submissionsService,
+          submissionsService,
       );
+      const returnedError = new HttpException('storage unsuccessful', 400);
+      const query = {schema: 'confetti'};
+      const req = {body: {data: 'confetti data'}};
+      let createSubmissionResponse = null;
 
-      const query = { schema: 'confetti' };
-      const req = { body: { data: 'confetti data' } };
-
-      const createSubmissionResponse = await submissionsController.createSubmission(
-        query,
-        req,
-      );
+      await submissionsController
+          .createSubmission(query, req)
+          .catch(response => {
+            createSubmissionResponse = response;
+          });
 
       expect(submissionsServiceCreateSubmissionStub).calledOnceWith(
-        query.schema,
-        req.body.data,
+          query.schema,
+          req.body.data,
       );
-      expect(createSubmissionResponse).to.deep.equal(
-        ERROR_STORAGE_UNSUCCESSFUL,
+      expect(JSON.stringify(createSubmissionResponse)).to.equal(
+          JSON.stringify(returnedError),
       );
     });
   });

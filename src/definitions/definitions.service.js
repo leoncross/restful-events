@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import {
+  ERROR_GETTING_DOCUMENT,
+  ERROR_NO_RESULTS_FOUND,
+  ERROR_SCHEMA_EXISTS,
+  SUCCESS_SCHEMA_ADDED,
+  SUCCESS_SCHEMA_REMOVED,
+  SUCCESS_SCHEMA_UPDATED,
+} from '../resources/errorHandlers';
 
 const SCHEMA = 'schema';
-
-const ERROR_NO_RESULTS_FOUND = { error: 'no results found' };
-const ERROR_GETTING_DOCUMENT = { error: 'error getting document' };
-const ERROR_SCHEMA_EXISTS = { error: 'document type exists' };
-
-const SUCCESS_SCHEMA_ADDED = { success: 'schema added' };
-const SUCCESS_SCHEMA_UPDATED = { success: 'schema updated' };
-const SUCCESS_SCHEMA_REMOVED = { success: 'schema removed' };
 
 @Injectable()
 export class DefinitionsService {
@@ -32,10 +32,11 @@ export class DefinitionsService {
   }
 
   async uploadSchema(type, schema, successMessage) {
+    const parsedSchema = JSON.parse(schema);
     return await this.db
-      .collection(type)
-      .doc(SCHEMA)
-      .set(schema)
+        .collection(type)
+        .doc(SCHEMA)
+        .set(parsedSchema)
       .then(() => {
         return successMessage;
       })

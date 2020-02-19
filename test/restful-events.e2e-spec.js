@@ -1,20 +1,22 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { AppModule } from '../src/app.module';
+import {Test} from '@nestjs/testing';
+import {AppModule} from '../src/app.module';
+
+import magicianJson from './testHelpers/magician.json';
+import magicianAlteredJson from './testHelpers/magicianAltered.json';
+import confettiJson from './testHelpers/confetti.json';
 import {
-  confetti,
-  magicianAltered,
-  magician,
-} from './testHelpers/resources.js';
+  ERROR_NO_RESULTS_FOUND,
+  STATUS_400_UNSUCCESSFUL,
+  STORAGE_SUCCESSFUL,
+  SUCCESS_SCHEMA_ADDED,
+  SUCCESS_SCHEMA_REMOVED,
+  SUCCESS_SCHEMA_UPDATED,
+} from '../src/resources/errorHandlers';
 
 describe('restful events - e2e', () => {
-  const ERROR_NO_RESULTS_FOUND = { error: 'no results found' };
-  const ERROR_STORAGE_UNSUCCESSFUL = { error: 'storage unsuccessful' };
-
-  const SUCCESS_SCHEMA_ADDED = { success: 'schema added' };
-  const SUCCESS_SCHEMA_UPDATED = { success: 'schema updated' };
-  const SUCCESS_SCHEMA_REMOVED = { success: 'schema removed' };
-  const STORAGE_SUCCESSFUL = { success: 'storage successful' };
+  const magician = JSON.stringify(magicianJson);
+  const magicianAltered = JSON.stringify(magicianAlteredJson);
 
   let app;
 
@@ -30,9 +32,9 @@ describe('restful events - e2e', () => {
     describe('/GET', () => {
       it('returns requested schema', async () => {
         return await request(app.getHttpServer())
-          .get('/definitions/?schema=confetti')
-          .expect(200)
-          .expect(confetti);
+            .get('/definitions/?schema=confetti')
+            .expect(200)
+            .expect(confettiJson);
       });
 
       it('no results found', async () => {
@@ -59,9 +61,9 @@ describe('restful events - e2e', () => {
           .expect(SUCCESS_SCHEMA_UPDATED);
 
         await request(app.getHttpServer())
-          .get('/definitions/?schema=magician')
-          .expect(200)
-          .expect(magicianAltered);
+            .get('/definitions/?schema=magician')
+            .expect(200)
+            .expect(magicianAlteredJson);
 
         return await request(app.getHttpServer())
           .delete('/definitions/?schema=magician')
@@ -118,11 +120,11 @@ describe('restful events - e2e', () => {
         };
 
         return await request(app.getHttpServer())
-          .post('/submissions/?schema=confetti')
-          .send({ data: userData })
-          .set('Content-Type', 'application/json')
-          .expect(400)
-          .expect(ERROR_STORAGE_UNSUCCESSFUL);
+            .post('/submissions/?schema=confetti')
+            .send({data: userData})
+            .set('Content-Type', 'application/json')
+            .expect(400)
+            .expect(STATUS_400_UNSUCCESSFUL);
       });
     });
   });

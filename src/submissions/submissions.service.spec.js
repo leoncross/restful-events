@@ -2,8 +2,9 @@ import chai from 'chai';
 import sinonChai from 'sinon-chai';
 
 import SubmissionsService from './submissions.service';
-import { confetti } from '../../test/testHelpers/resources';
+import * as confetti from '../../test/testHelpers/confetti';
 import generateMockFirestore from '../../test/testHelpers/mockFirestore';
+import {STORAGE_SUCCESSFUL} from '../resources/errorHandlers';
 
 const expect = chai.expect;
 chai.use(sinonChai);
@@ -238,7 +239,7 @@ describe('SubmissionsService', () => {
           schemaType,
           userData,
         );
-        expect(creationResult).to.deep.equal({ success: 'storage successful' });
+        expect(creationResult).to.deep.equal(STORAGE_SUCCESSFUL);
       });
     });
     describe('errors', () => {
@@ -275,6 +276,7 @@ describe('SubmissionsService', () => {
 
           const functionality = 'getSuccess';
           const result = confetti;
+
           schemaType = 'confetti';
 
           const mockFirestore = generateMockFirestore({

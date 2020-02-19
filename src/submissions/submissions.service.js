@@ -1,13 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import {ERROR_NO_RESULTS_FOUND, ERROR_STORAGE_UNSUCCESSFUL, STORAGE_SUCCESSFUL,} from '../resources/errorHandlers';
 
 const SCHEMA = 'schema';
 const ERROR = 'error';
 const KEY = 'key';
-
-const STORAGE_SUCCESSFUL = { success: 'storage successful' };
-const ERROR_NO_RESULTS_FOUND = { error: 'no results found' };
-const ERROR_STORAGE_UNSUCCESSFUL = { error: 'storage unsuccessful' };
 
 @Injectable()
 export default class SubmissionsService {
@@ -31,7 +28,6 @@ export default class SubmissionsService {
       .collection(type)
       .doc()
       .set(submission)
-      .then(doc => {});
   }
 
   matchesRequired(schemaElement, submission) {
@@ -99,6 +95,7 @@ export default class SubmissionsService {
       if (KEY in schema[i]) {
         const schemaSection = schema[i];
         const subValue = submission[schemaSection.key];
+
         if (!this.matchesRequired(schemaSection, submission)) failValidation();
         if (!this.matchesOptions(schemaSection, subValue)) failValidation();
         if (!this.matchesLength(schemaSection, subValue)) failValidation();
@@ -114,6 +111,7 @@ export default class SubmissionsService {
     if (this.noSchemaFound(foundSchema)) {
       return ERROR_STORAGE_UNSUCCESSFUL;
     }
+
     const schema = foundSchema[schemaType];
 
     const validation = this.handleValidationRequirements(schema, submission);
