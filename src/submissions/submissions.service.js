@@ -25,9 +25,9 @@ export default class SubmissionsService {
 
   async uploadSubmission(type, submission) {
     return await this.db
-      .collection(type)
-      .doc()
-      .set(submission)
+        .collection(type)
+        .doc()
+        .set(submission);
   }
 
   matchesRequired(schemaElement, submission) {

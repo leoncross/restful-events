@@ -5,6 +5,8 @@ import {AppModule} from '../src/app.module';
 import magicianJson from './testHelpers/magician.json';
 import magicianAlteredJson from './testHelpers/magicianAltered.json';
 import confettiJson from './testHelpers/confetti.json';
+import hotTubJson from './testHelpers/hottub';
+
 import {
   ERROR_NO_RESULTS_FOUND,
   STATUS_400_UNSUCCESSFUL,
@@ -126,6 +128,40 @@ describe('restful events - e2e', () => {
             .expect(400)
             .expect(STATUS_400_UNSUCCESSFUL);
       });
+    });
+  });
+  describe('Definitions and Submissions', () => {
+    const hotTub = JSON.stringify(hotTubJson);
+
+    it('posts schema, posts submission, removes schema', async () => {
+      const userData = {
+        hottubtype: 'inflatable',
+        type: 'wedding',
+        body: 'this will be the best wedding ever',
+        name: 'leon',
+        email: 'best@wedding.ever',
+        date: '2020-01-01',
+      };
+
+      await request(app.getHttpServer())
+          .post('/definitions/?schema=hottub')
+          .send({data: hotTub})
+          .set('Content-Type', 'application/json')
+          .expect(201)
+          .expect(SUCCESS_SCHEMA_ADDED);
+
+      await request(app.getHttpServer())
+          .post('/submissions/?schema=hottub')
+          .send({data: userData})
+          .set('Content-Type', 'application/json')
+          .expect(200)
+          .expect(STORAGE_SUCCESSFUL);
+
+      return await request(app.getHttpServer())
+          .delete('/definitions/?schema=hottub')
+          .set('Content-Type', 'application/json')
+          .expect(200)
+          .expect(SUCCESS_SCHEMA_REMOVED);
     });
   });
 });

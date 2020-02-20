@@ -1,0 +1,85 @@
+{
+  "hottub": [
+    {
+      "key": "hottubtype",
+      "options": [
+        {
+          "name": "Inflatable",
+          "value": "inflatable"
+        },
+        {
+          "name": "Solid",
+          "value": "solid"
+        }
+      ],
+      "type": "radios",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "type",
+      "options": [
+        {
+          "name": "Birthday",
+          "value": "birthday"
+        },
+        {
+          "name": "Wedding",
+          "value": "wedding"
+        },
+        {
+          "name": "Stag Party",
+          "value": "stagparty"
+        }
+      ],
+      "type": "radios",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "body",
+      "placeholder": "Compose message...",
+      "title": "Your Personal Message to Suppliers",
+      "type": "textarea",
+      "validation": {
+        "maxLength": 250,
+        "required": true,
+        "validationMessage": "Personal message is required!"
+      }
+    },
+    {
+      "key": "name",
+      "placeholder": "Your name...",
+      "title": "Name",
+      "type": "string",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "email",
+      "placeholder": "Your email...",
+      "title": "Email",
+      "type": "string",
+      "validation": {
+        "pattern": "^\\S+@\\S+$",
+        "required": true
+      }
+    },
+    {
+      "key": "date",
+      "placeholder": "Date of your event",
+      "type": "date",
+      "validation": {
+        "minDate": "2018-01-21",
+        "required": true
+      }
+    },
+    {
+      "title": "Get Quotes",
+      "type": "submit"
+    }
+  ]
+}

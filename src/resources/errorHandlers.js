@@ -10,6 +10,6 @@ export const SUCCESS_SCHEMA_REMOVED = {message: 'schema removed'};
 export const STORAGE_SUCCESSFUL = {message: 'storage successful'};
 
 export const STATUS_400_UNSUCCESSFUL = {
-    statusCode: 400,
-    message: 'storage unsuccessful',
+  statusCode: 400,
+  message: 'storage unsuccessful',
 };
